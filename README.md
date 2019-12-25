@@ -28,5 +28,5 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.jarryleo:ViewPager2Banner:v1.0'
+	        implementation 'com.github.jarryleo:ViewPager2Banner:v1.1'
 	}
