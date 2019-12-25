@@ -1,6 +1,10 @@
 # ViewPager2Banner
 使用ViewPager2实现的banner效果
 
+可以实现不同的特殊效果，具体请看示例；可以竖向滚动！
+
+![screenShot](image/screenShot.png)
+
 用法：   
 ``` 
         //普通的RecyclerView的adapter
