@@ -1,6 +1,10 @@
 # ViewPager2Banner
 使用ViewPager2实现的banner效果
 
+可以实现不同的特殊效果，具体请看示例；可以竖向滚动！
+
+![screenShot](image/screenShot.png)
+
 用法：   
 ``` 
         //普通的RecyclerView的adapter
@@ -28,5 +32,6 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
+		implementation 'androidx.viewpager2:viewpager2:1.0.0'
 	        implementation 'com.github.jarryleo:ViewPager2Banner:v1.1'
 	}
