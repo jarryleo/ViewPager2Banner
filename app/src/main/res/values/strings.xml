@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ViewPager2Banner</string>
+
+
+    <string-array name="text_banner">
+        <item>竖直滚动广告</item>
+        <item>The vertical scrolling advertising</item>
+        <item>CycleViewPager2 上下滚动的广告轮播</item>
+    </string-array>
+
 </resources>
