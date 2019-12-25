@@ -49,14 +49,25 @@ class ViewPager2Banner @JvmOverloads constructor(
             mCurrentPosition = position
         }
 
-        override fun onPageScrollStateChanged(state: Int) {
-            if (state == ViewPager2.SCROLL_STATE_IDLE) {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+            if (positionOffset == 0.0f) {
+                mCurrentPosition = position
                 if (getWrapperCount() > 1 && mCurrentPosition == getWrapperCount() - 1) {
                     setCurrentItem(1, false)
                 } else if (mCurrentPosition == 0) {
                     setCurrentItem(getWrapperCount() - 2, false)
                 }
             }
+        }
+    }
+
+    inner class AdapterDataObserver : RecyclerView.AdapterDataObserver() {
+        override fun onChanged() {
+            notifyDataSetChanged()
         }
     }
 
@@ -88,9 +99,15 @@ class ViewPager2Banner @JvmOverloads constructor(
         return mCurrentPosition + 1
     }
 
+
     inner class WrapperAdapter<VH : RecyclerView.ViewHolder>
-        (private val adapter: RecyclerView.Adapter<VH>) :
+        (val adapter: RecyclerView.Adapter<VH>) :
         RecyclerView.Adapter<VH>() {
+
+        init {
+            adapter.registerAdapterDataObserver(AdapterDataObserver())
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             return adapter.onCreateViewHolder(parent, viewType)
         }
@@ -128,7 +145,6 @@ class ViewPager2Banner @JvmOverloads constructor(
                     realPosition = 0
                 }
             }
-            println("position = $position  realPosition = $realPosition")
             return realPosition
         }
     }
@@ -136,8 +152,12 @@ class ViewPager2Banner @JvmOverloads constructor(
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         mWrapperAdapter = WrapperAdapter(adapter)
         mViewPager2.adapter = mWrapperAdapter
-        mCurrentPosition = 1
         startAutoSwitch()
+        post { setCurrentItem(1, false) }
+    }
+
+    fun notifyDataSetChanged() {
+        mWrapperAdapter?.notifyDataSetChanged()
         post { setCurrentItem(1, false) }
     }
 
@@ -147,7 +167,7 @@ class ViewPager2Banner @JvmOverloads constructor(
 
     private fun getWrapperCount() = mWrapperAdapter?.itemCount ?: 0
 
-    fun getAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>? = mViewPager2.adapter
+    fun getAdapter() = mWrapperAdapter?.adapter
 
     fun addItemDecoration(decor: RecyclerView.ItemDecoration) {
         mViewPager2.addItemDecoration(decor)
