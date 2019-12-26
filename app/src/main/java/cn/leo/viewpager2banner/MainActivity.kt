@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import cn.leo.library.annotation.Align
-import cn.leo.library.decoration.IndicatorDecoration
+import cn.leo.library.decoration.DotIndicatorDecoration
 import cn.leo.library.support.config
 import cn.leo.library.support.dp
 import cn.leo.library.transformer.DepthPageTransformer
@@ -28,13 +28,19 @@ class MainActivity : AppCompatActivity() {
             //transformer = ZoomOutPageTransformer()//下沉渐变效果
             //transformer = MultiplePagerScaleInTransformer(100,0.2f)//左右条目缩小漏出效果
             itemMargin = 25.dp()//条目间距
+            interval = 5000L    //自动翻页时间间隔
             //设置圆点指示器
-            indicator = IndicatorDecoration(
+            indicator = DotIndicatorDecoration(
                 align = Align.BOTTOM or Align.LEFT,
                 horizontalMargin = 46.dp()
             )
+            //设置图片指示器
+            /*indicator = DrawableIndicatorDecoration(
+                align = Align.BOTTOM or Align.LEFT,
+                selectedDrawable = getDrawable(R.drawable.shape_select)!!,
+                unselectedDrawable = getDrawable(R.drawable.shape_unselect)!!
+            )*/
         }
-
         //文字上下滚动广告
         textBanner.config {
             adapter = TextBannerAdapter().apply { data = textRes.toList() }

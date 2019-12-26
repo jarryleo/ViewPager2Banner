@@ -22,7 +22,7 @@ import kotlin.math.max
  * 指示器设置支持drawable文件和图片
  */
 @Suppress("UNUSED", "UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
-class IndicatorDecoration(
+class DotIndicatorDecoration(
     //是否是无限循环
     private val isInfinite: Boolean = true,
     //指示器位置，可以用 ALIGN_BOTTOM or ALIGN_RIGHT 来表示右下

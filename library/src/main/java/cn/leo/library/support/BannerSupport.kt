@@ -15,6 +15,7 @@ fun ViewPager2Banner.config(config: BannerConfig.() -> Unit) {
     val bannerConfig = BannerConfig()
     config(bannerConfig)
     setOrientation(bannerConfig.orientation)
+    interval = bannerConfig.interval
     bannerConfig.adapter?.let {
         setAdapter(it)
     }
@@ -31,9 +32,11 @@ fun ViewPager2Banner.config(config: BannerConfig.() -> Unit) {
 }
 
 class BannerConfig {
+    var interval: Long = 3000L
     var itemMargin: Int = 0
     var adapter: RecyclerView.Adapter<*>? = null
     var indicator: RecyclerView.ItemDecoration? = null
     var transformer: ViewPager2.PageTransformer? = null
+    @ViewPager2.Orientation
     var orientation: Int = ViewPager2.ORIENTATION_HORIZONTAL
 }
