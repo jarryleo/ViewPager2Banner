@@ -5,23 +5,30 @@
 
 ![screenShot](image/screenShot.png)
 
-用法：   
+基础用法：   
+```
+	banner.config {adapter = BannerAdapter().apply { data = imgRes }}
+```
+
+添加翻页效果和指示器：
 ``` 
-        //普通的RecyclerView的adapter
-        val adapter = BannerAdapter()
-        adapter.data = imgRes
-        banner.setAdapter(adapter)
-        //设置条目与容器的左右边距
-        banner.addItemDecoration(MarginItemDecoration(50))
-        //设置条目的缩放和左右缩进间隔
-        banner.setPageTransformer(MultiplePagerScaleInTransformer(100,0.2f))
-        //设置圆点指示器
-        banner.addItemDecoration(IndicatorDecoration())
+        banner.config {
+            adapter = BannerAdapter().apply { data = imgRes }
+            transformer = DepthPageTransformer() //层叠渐变效果
+            //transformer = ZoomOutPageTransformer()//下沉渐变效果
+            //transformer = MultiplePagerScaleInTransformer(100,0.2f)//左右条目缩小漏出效果
+            itemMargin = 25.dp()//条目间距
+            //设置圆点指示器
+            indicator = IndicatorDecoration(
+                align = Align.BOTTOM or Align.LEFT,
+                horizontalMargin = 46.dp()
+            )
+        }
 ```
 
 引用：
-Step 1. Add the JitPack repository to your build file
-Add it in your root build.gradle at the end of repositories:
+Step 1. Add the JitPack repository to your build file          
+Add it in your root build.gradle at the end of repositories:        
 
 	allprojects {
 		repositories {
@@ -29,9 +36,10 @@ Add it in your root build.gradle at the end of repositories:
 			maven { url 'https://jitpack.io' }
 		}
 	}
+	
 Step 2. Add the dependency
 
 	dependencies {
 		implementation 'androidx.viewpager2:viewpager2:1.0.0'
-	        implementation 'com.github.jarryleo:ViewPager2Banner:v1.1'
+	        implementation 'com.github.jarryleo:ViewPager2Banner:v1.2'
 	}
