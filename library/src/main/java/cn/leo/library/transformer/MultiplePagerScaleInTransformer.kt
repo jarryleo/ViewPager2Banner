@@ -13,7 +13,7 @@ import kotlin.math.abs
  */
 @Suppress("UNUSED", "UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
 class MultiplePagerScaleInTransformer(
-    @param:Px private val marginPx: Int,
+    @param:Px private val margin: Int,
     private val scale: Float = 1f
 ) :
     ViewPager2.PageTransformer {
@@ -22,7 +22,7 @@ class MultiplePagerScaleInTransformer(
         position: Float
     ) {
         val viewPager = requireViewPager(page)
-        val offset = position * marginPx
+        val offset = position * margin
         if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
             if (ViewCompat.getLayoutDirection(viewPager) == ViewCompat.LAYOUT_DIRECTION_RTL) {
                 page.translationX = offset

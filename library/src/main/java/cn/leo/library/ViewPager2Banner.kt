@@ -25,15 +25,14 @@ class ViewPager2Banner @JvmOverloads constructor(
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
-
-    private var mCurrentPosition = RecyclerView.NO_POSITION
-    private var mWrapperAdapter: WrapperAdapter<*>? = null
-    private val mAutoSwitchRunnable = AutoSwitchRunnable()
     /**
      * 自动滚动间隔
      */
     var interval = 3000L
     private var mIsAutoSwitch = true
+    private var mCurrentPosition = RecyclerView.NO_POSITION
+    private var mWrapperAdapter: WrapperAdapter<*>? = null
+    private val mAutoSwitchRunnable = AutoSwitchRunnable()
     private val mViewPager2 by lazy { ViewPager2(context) }
 
     init {
@@ -44,6 +43,9 @@ class ViewPager2Banner @JvmOverloads constructor(
         addView(mViewPager2)
     }
 
+    /**
+     * 左右边界无限循环位置修复
+     */
     inner class PageFixCallback : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             mCurrentPosition = position
@@ -56,21 +58,29 @@ class ViewPager2Banner @JvmOverloads constructor(
         ) {
             if (positionOffset == 0.0f) {
                 mCurrentPosition = position
-                if (getWrapperCount() > 1 && mCurrentPosition == getWrapperCount() - 1) {
-                    setCurrentItem(1, false)
-                } else if (mCurrentPosition == 0) {
-                    setCurrentItem(getWrapperCount() - 2, false)
+                if (getWrapperCount() > 1) {
+                    if (mCurrentPosition == getWrapperCount() - 1) {
+                        setCurrentItem(1, false)
+                    } else if (mCurrentPosition == 0) {
+                        setCurrentItem(getWrapperCount() - 2, false)
+                    }
                 }
             }
         }
     }
 
+    /**
+     * 数据变更通知
+     */
     inner class AdapterDataObserver : RecyclerView.AdapterDataObserver() {
         override fun onChanged() {
             notifyDataSetChanged()
         }
     }
 
+    /**
+     * 自动翻页任务
+     */
     inner class AutoSwitchRunnable : Runnable {
         override fun run() {
             if (mIsAutoSwitch && isVisible()) {
@@ -99,7 +109,9 @@ class ViewPager2Banner @JvmOverloads constructor(
         return mCurrentPosition + 1
     }
 
-
+    /**
+     * adapter包装类，前后添加一个页面，实现无限循环
+     */
     inner class WrapperAdapter<VH : RecyclerView.ViewHolder>
         (val adapter: RecyclerView.Adapter<VH>) :
         RecyclerView.Adapter<VH>() {
@@ -134,6 +146,7 @@ class ViewPager2Banner @JvmOverloads constructor(
             return fixPosition(mCurrentPosition)
         }
 
+        //包装类条目多2个，从包装索引获取真实索引
         private fun fixPosition(position: Int): Int {
             var realPosition = position
             if (adapter.itemCount > 1) {
@@ -194,6 +207,9 @@ class ViewPager2Banner @JvmOverloads constructor(
         mViewPager2.setCurrentItem(item, smoothScroll)
     }
 
+    /**
+     * 触摸暂停
+     */
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val action = ev?.actionMasked
         if (action == MotionEvent.ACTION_DOWN) {
@@ -207,6 +223,9 @@ class ViewPager2Banner @JvmOverloads constructor(
         return super.dispatchTouchEvent(ev)
     }
 
+    /**
+     * 不可见或者可见区域过少时候暂停翻页
+     */
     private fun isVisible(): Boolean {
         if (!mViewPager2.isShown) {
             return false
@@ -230,12 +249,18 @@ class ViewPager2Banner @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 状态保存
+     */
     override fun onSaveInstanceState(): Parcelable? {
         return SavedState(super.onSaveInstanceState()).apply {
             mCurrentItem = mCurrentPosition
         }
     }
 
+    /**
+     * 状态恢复
+     */
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {
             mCurrentPosition = state.mCurrentItem
@@ -247,6 +272,9 @@ class ViewPager2Banner @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 状态实体
+     */
     class SavedState : BaseSavedState {
         var mCurrentItem = 0
 

@@ -3,8 +3,10 @@ package cn.leo.viewpager2banner
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import cn.leo.library.annotation.Align
 import cn.leo.library.decoration.IndicatorDecoration
-import cn.leo.library.decoration.MarginItemDecoration
+import cn.leo.library.support.config
+import cn.leo.library.support.dp
 import cn.leo.library.transformer.DepthPageTransformer
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,25 +21,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        val adapter = BannerAdapter()
-        adapter.data = imgRes
-        banner.setAdapter(adapter)
-        //设置条目与容器的左右边距
-        banner.addItemDecoration(MarginItemDecoration(50))
-        //设置条目的缩放和左右缩进间隔（左右条目缩小漏出效果）
-        //banner.setPageTransformer(MultiplePagerScaleInTransformer(100,0.2f))
-        //层叠渐变效果
-        banner.setPageTransformer(DepthPageTransformer())
-        //下沉渐变效果
-        //banner.setPageTransformer(ZoomOutPageTransformer())
-        //设置圆点指示器
-        banner.addItemDecoration(IndicatorDecoration())
+        //配置图片banner
+        banner.config {
+            adapter = BannerAdapter().apply { data = imgRes }
+            transformer = DepthPageTransformer() //层叠渐变效果
+            //transformer = ZoomOutPageTransformer()//下沉渐变效果
+            //transformer = MultiplePagerScaleInTransformer(100,0.2f)//左右条目缩小漏出效果
+            itemMargin = 25.dp()//条目间距
+            //设置圆点指示器
+            indicator = IndicatorDecoration(
+                align = Align.BOTTOM or Align.LEFT,
+                horizontalMargin = 46.dp()
+            )
+        }
 
         //文字上下滚动广告
-        val textBannerAdapter = TextBannerAdapter()
-        textBannerAdapter.data = textRes.toList()
-        textBanner.setAdapter(textBannerAdapter)
-        textBanner.setOrientation(ViewPager2.ORIENTATION_VERTICAL)
+        textBanner.config {
+            adapter = TextBannerAdapter().apply { data = textRes.toList() }
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
+
     }
 }

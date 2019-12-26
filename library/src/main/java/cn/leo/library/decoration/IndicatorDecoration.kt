@@ -1,42 +1,50 @@
 package cn.leo.library.decoration
 
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import androidx.annotation.IntDef
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import cn.leo.library.annotation.IndicatorAlign
+import cn.leo.library.annotation.Align.BOTTOM
+import cn.leo.library.annotation.Align.LEFT
+import cn.leo.library.annotation.Align.RIGHT
+import cn.leo.library.annotation.Align.TOP
+import cn.leo.library.support.dp
+import kotlin.math.max
 
 /**
  * @author : Jarry Leo
  * @date : 2018/11/19 16:27
+ *
+ * 待完善：
+ * 指示器设置支持drawable文件和图片
  */
 @Suppress("UNUSED", "UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
-class IndicatorDecoration(private val isInfinite: Boolean = true) : ItemDecoration() {
-    @Align
-    private var mAlign = ALIGN_BOTTOM
+class IndicatorDecoration(
+    //是否是无限循环
+    private val isInfinite: Boolean = true,
+    //指示器位置，可以用 ALIGN_BOTTOM or ALIGN_RIGHT 来表示右下
+    @IndicatorAlign
+    private var align: Int = BOTTOM,
+    //选中/非选中圆点尺寸和颜色
+    private var selectedSize: Int = 7.dp(),
+    private var unselectedSize: Int = 7.dp(),
+    private var selectedColor: Int = Color.RED,
+    private var unselectedColor: Int = Color.WHITE,
+    //圆点之间的间距
+    private var space: Int = 6.dp(),
+    //竖向边距
+    private var verticalMargin: Int = 16.dp(),
+    //横向边距
+    private var horizontalMargin: Int = 16.dp()
+) : ItemDecoration() {
 
-    @IntDef(
-        value = [ALIGN_LEFT, ALIGN_RIGHT, ALIGN_TOP, ALIGN_BOTTOM],
-        flag = true
-    )
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    annotation class Align
-
-    private var mSelectedSize = dip2px(7f)
-    private var mUnselectedSize = dip2px(7f)
-    private var mSelectedColor = Color.RED
-    private var mUnselectedColor = Color.WHITE
-    private var mSpace = dip2px(6f)
-    private var mVerticalPadding = dip2px(16f)
-    private var mHorizontalPadding = dip2px(16f)
-    private val mPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     /**
-     * RecyclerView 的每次滚动都会调用，适合做滑动动画
+     * RecyclerView 的每次滚动都会调用
      */
     override fun onDrawOver(
         c: Canvas,
@@ -44,7 +52,7 @@ class IndicatorDecoration(private val isInfinite: Boolean = true) : ItemDecorati
         state: RecyclerView.State
     ) {
         val layoutManager = parent.layoutManager
-        //宽高
+        //banner宽高
         val width = parent.measuredWidth
         val height = parent.measuredHeight
         //条目个数
@@ -72,39 +80,40 @@ class IndicatorDecoration(private val isInfinite: Boolean = true) : ItemDecorati
             centerItemPosition = fixPosition(centerItemPosition, layoutManager.itemCount)
         }
         //指示器总体宽度
-        val indicatorWidth = mUnselectedSize * itemCount + mSpace * (itemCount - 1) +
-                mSelectedSize - mUnselectedSize
+        val indicatorWidth = unselectedSize * itemCount +
+                space * (itemCount - 1) + selectedSize - unselectedSize
         //指示器位置
         var indicatorLeft = (width - indicatorWidth) / 2
-        if (mAlign and ALIGN_LEFT == ALIGN_LEFT) {
-            indicatorLeft = mVerticalPadding
+        if (align and LEFT == LEFT) {
+            indicatorLeft = horizontalMargin
         }
-        if (mAlign and ALIGN_RIGHT == ALIGN_RIGHT) {
-            indicatorLeft = width - indicatorWidth - mVerticalPadding
+        if (align and RIGHT == RIGHT) {
+            indicatorLeft = width - indicatorWidth - horizontalMargin
         }
-        var indicatorTop = (height - mUnselectedSize) / 2
-        if (mAlign and ALIGN_TOP == ALIGN_TOP) {
-            indicatorTop = mHorizontalPadding
+        var indicatorTop = (height - unselectedSize) / 2
+        if (align and TOP == TOP) {
+            indicatorTop = verticalMargin
         }
-        if (mAlign and ALIGN_BOTTOM == ALIGN_BOTTOM) {
-            indicatorTop = height - mUnselectedSize - mVerticalPadding
+        if (align and BOTTOM == BOTTOM) {
+            indicatorTop = height - max(unselectedSize, selectedSize) - verticalMargin
         }
         //绘制指示器
         for (i in 0 until itemCount) {
-            var r = mUnselectedSize
+            var r = unselectedSize
             if (centerItemPosition == i) { //选中条目指示器颜色
-                mPaint.color = mSelectedColor
-                r = mSelectedSize
+                mPaint.color = selectedColor
+                r = selectedSize
             } else {
-                mPaint.color = mUnselectedColor
+                mPaint.color = unselectedColor
             }
-            val left = i * (mUnselectedSize + mSpace) + indicatorLeft
-            val cx = left + mUnselectedSize / 2
-            val cy = indicatorTop + mUnselectedSize / 2
+            val left = i * (unselectedSize + space) + indicatorLeft
+            val cx = left + unselectedSize / 2
+            val cy = indicatorTop + unselectedSize / 2
             c.drawCircle(cx.toFloat(), cy.toFloat(), r / 2f, mPaint)
         }
     }
 
+    //修复无限循环的banner条目位置
     private fun fixPosition(position: Int, count: Int): Int {
         var realPosition = position
         if (count > 1) {
@@ -120,51 +129,35 @@ class IndicatorDecoration(private val isInfinite: Boolean = true) : ItemDecorati
     }
 
     fun setSelectedSize(selectedSize: Int) {
-        mSelectedSize = dip2px(selectedSize.toFloat())
+        this.selectedSize = selectedSize.dp()
     }
 
     fun setUnselectedSize(unselectedSize: Int) {
-        mUnselectedSize = dip2px(unselectedSize.toFloat())
+        this.unselectedSize = unselectedSize.dp()
     }
 
     fun setSelectedColor(selectedColor: Int) {
-        mSelectedColor = selectedColor
+        this.selectedColor = selectedColor
     }
 
     fun setUnselectedColor(unselectedColor: Int) {
-        mUnselectedColor = unselectedColor
+        this.unselectedColor = unselectedColor
     }
 
     fun setSpace(space: Int) {
-        mSpace = dip2px(space.toFloat())
+        this.space = space.dp()
     }
 
     fun setVerticalPadding(verticalPadding: Int) {
-        mVerticalPadding = dip2px(verticalPadding.toFloat())
+        this.verticalMargin = verticalPadding.dp()
     }
 
     fun setHorizontalPadding(horizontalPadding: Int) {
-        mHorizontalPadding = dip2px(horizontalPadding.toFloat())
+        this.horizontalMargin = horizontalPadding.dp()
     }
 
-    fun setAlign(@Align align: Int) {
-        mAlign = align
+    fun setAlign(@IndicatorAlign align: Int) {
+        this.align = align
     }
 
-    private fun dip2px(dpValue: Float): Int {
-        val scale =
-            Resources.getSystem().displayMetrics.density
-        return (dpValue * scale + 0.5f).toInt()
-    }
-
-    companion object {
-        /**
-         * 待完善：
-         * 指示器设置支持drawable文件和图片
-         */
-        const val ALIGN_LEFT = 1
-        const val ALIGN_RIGHT = 1 shl 1
-        const val ALIGN_TOP = 1 shl 2
-        const val ALIGN_BOTTOM = 1 shl 3
-    }
 }
