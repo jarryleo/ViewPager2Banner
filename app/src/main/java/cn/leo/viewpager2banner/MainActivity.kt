@@ -8,6 +8,7 @@ import cn.leo.library.decoration.DotIndicatorDecoration
 import cn.leo.library.support.config
 import cn.leo.library.support.dp
 import cn.leo.library.transformer.DepthPageTransformer
+import cn.leo.library.transformer.MultiplePagerScaleInTransformer
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,11 +25,12 @@ class MainActivity : AppCompatActivity() {
         //配置图片banner
         banner.config {
             adapter = BannerAdapter().apply { data = imgRes }
-            transformer = DepthPageTransformer() //层叠渐变效果
+            //transformer = DepthPageTransformer() //层叠渐变效果
             //transformer = ZoomOutPageTransformer()//下沉渐变效果
-            //transformer = MultiplePagerScaleInTransformer(100,0.2f)//左右条目缩小漏出效果
+            transformer = MultiplePagerScaleInTransformer(100,0.2f)//左右条目缩小漏出效果
             itemMargin = 25.dp()//条目间距
             interval = 5000L    //自动翻页时间间隔
+            //orientation = ViewPager2.ORIENTATION_VERTICAL
             //设置圆点指示器
             indicator = DotIndicatorDecoration(
                 align = Align.BOTTOM or Align.LEFT,
