@@ -32,6 +32,7 @@ class ViewPager2Banner @JvmOverloads constructor(
     private var mCurrentPosition = RecyclerView.NO_POSITION
     private var mWrapperAdapter: WrapperAdapter<*>? = null
     private val mAutoSwitchRunnable = AutoSwitchRunnable()
+    private val mAdapterDataObserver = AdapterDataObserver()
     private val mViewPager2 by lazy { ViewPager2(context) }
 
     init {
@@ -120,7 +121,7 @@ class ViewPager2Banner @JvmOverloads constructor(
         RecyclerView.Adapter<VH>() {
 
         init {
-            adapter.registerAdapterDataObserver(AdapterDataObserver())
+            adapter.registerAdapterDataObserver(mAdapterDataObserver)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -166,15 +167,23 @@ class ViewPager2Banner @JvmOverloads constructor(
     }
 
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
+        mWrapperAdapter?.adapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
         mWrapperAdapter = WrapperAdapter(adapter)
         mViewPager2.adapter = mWrapperAdapter
-        startAutoSwitch()
-        post { setCurrentItem(1, false) }
+        reset()
     }
+
 
     fun notifyDataSetChanged() {
         mWrapperAdapter?.notifyDataSetChanged()
-        post { setCurrentItem(1, false) }
+        reset()
+    }
+
+    fun reset() {
+        post {
+            setCurrentItem(1, false)
+            startAutoSwitch()
+        }
     }
 
     fun getPosition() = mWrapperAdapter?.getRealPosition() ?: RecyclerView.NO_POSITION
