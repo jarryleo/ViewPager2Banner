@@ -146,9 +146,7 @@ class ViewPager2Banner @JvmOverloads constructor(
 
         fun getRealCount() = adapter.itemCount
 
-        fun getRealPosition(): Int {
-            return fixPosition(mCurrentPosition)
-        }
+        fun getRealPosition() = fixPosition(mCurrentPosition)
 
         //包装类条目多2个，从包装索引获取真实索引
         private fun fixPosition(position: Int): Int {
@@ -242,14 +240,16 @@ class ViewPager2Banner @JvmOverloads constructor(
         if (!mViewPager2.isShown) {
             return false
         }
+        //锁屏后不滚动
         val pm = context
             .getSystemService(Context.POWER_SERVICE) as PowerManager
         val isScreenOn = pm.isInteractive
         if (!isScreenOn) {
             return false
         }
+        //计算可见面积
         val rect = Rect()
-        val visibility: Boolean = mViewPager2.getLocalVisibleRect(rect)
+        val visibility = mViewPager2.getLocalVisibleRect(rect)
         val visibleArea = rect.width() * rect.height()
         val area = width * height
         val v = visibleArea * 1f / area
