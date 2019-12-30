@@ -7,5 +7,6 @@
         <item>The vertical scrolling advertising</item>
         <item>CycleViewPager2 上下滚动的广告轮播</item>
     </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>
