@@ -29,11 +29,11 @@ class DrawableIndicatorDecoration(
     @IndicatorAlign
     private var align: Int = BOTTOM,
     //间距
-    private var space: Int = 6.dp(),
+    private var space: Int = 6.dp,
     //竖向边距
-    private var verticalMargin: Int = 16.dp(),
+    private var verticalMargin: Int = 16.dp,
     //横向边距
-    private var horizontalMargin: Int = 16.dp()
+    private var horizontalMargin: Int = 16.dp
 ) : ItemDecoration() {
 
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -135,15 +135,15 @@ class DrawableIndicatorDecoration(
     }
 
     fun setSpace(space: Int) {
-        this.space = space.dp()
+        this.space = space.dp
     }
 
     fun setVerticalPadding(verticalPadding: Int) {
-        this.verticalMargin = verticalPadding.dp()
+        this.verticalMargin = verticalPadding.dp
     }
 
     fun setHorizontalPadding(horizontalPadding: Int) {
-        this.horizontalMargin = horizontalPadding.dp()
+        this.horizontalMargin = horizontalPadding.dp
     }
 
     fun setAlign(@IndicatorAlign align: Int) {

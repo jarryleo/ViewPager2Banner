@@ -29,16 +29,16 @@ class DotIndicatorDecoration(
     @IndicatorAlign
     private var align: Int = BOTTOM,
     //选中/非选中圆点尺寸和颜色
-    private var selectedSize: Int = 7.dp(),
-    private var unselectedSize: Int = 7.dp(),
+    private var selectedSize: Int = 7.dp,
+    private var unselectedSize: Int = 7.dp,
     private var selectedColor: Int = Color.RED,
     private var unselectedColor: Int = Color.WHITE,
     //圆点之间的间距
-    private var space: Int = 6.dp(),
+    private var space: Int = 6.dp,
     //竖向边距
-    private var verticalMargin: Int = 16.dp(),
+    private var verticalMargin: Int = 16.dp,
     //横向边距
-    private var horizontalMargin: Int = 16.dp()
+    private var horizontalMargin: Int = 16.dp
 ) : ItemDecoration() {
 
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -129,11 +129,11 @@ class DotIndicatorDecoration(
     }
 
     fun setSelectedSize(selectedSize: Int) {
-        this.selectedSize = selectedSize.dp()
+        this.selectedSize = selectedSize.dp
     }
 
     fun setUnselectedSize(unselectedSize: Int) {
-        this.unselectedSize = unselectedSize.dp()
+        this.unselectedSize = unselectedSize.dp
     }
 
     fun setSelectedColor(selectedColor: Int) {
@@ -145,15 +145,15 @@ class DotIndicatorDecoration(
     }
 
     fun setSpace(space: Int) {
-        this.space = space.dp()
+        this.space = space.dp
     }
 
     fun setVerticalPadding(verticalPadding: Int) {
-        this.verticalMargin = verticalPadding.dp()
+        this.verticalMargin = verticalPadding.dp
     }
 
     fun setHorizontalPadding(horizontalPadding: Int) {
-        this.horizontalMargin = horizontalPadding.dp()
+        this.horizontalMargin = horizontalPadding.dp
     }
 
     fun setAlign(@IndicatorAlign align: Int) {

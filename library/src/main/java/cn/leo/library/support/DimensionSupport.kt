@@ -11,25 +11,14 @@ import kotlin.math.roundToInt
 /**
  * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
  */
-fun Float.dp(): Int {
-    val scale = Resources.getSystem().displayMetrics.density
-    return (this * scale).roundToInt()
-}
+val Double.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
+val Float.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
+val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
 
-fun Int.dp(): Int {
-    val scale = Resources.getSystem().displayMetrics.density
-    return (this * scale).roundToInt()
-}
 
 /**
  * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
  */
-fun Float.px(): Int {
-    val scale = Resources.getSystem().displayMetrics.density
-    return (this / scale).roundToInt()
-}
-
-fun Int.px(): Int {
-    val scale = Resources.getSystem().displayMetrics.density
-    return (this / scale).roundToInt()
-}
+val Double.px: Int get() = (this / Resources.getSystem().displayMetrics.density).roundToInt()
+val Float.px: Int get() = (this / Resources.getSystem().displayMetrics.density).roundToInt()
+val Int.px: Int get() = (this / Resources.getSystem().displayMetrics.density).roundToInt()

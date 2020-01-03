@@ -28,13 +28,13 @@ class MainActivity : AppCompatActivity() {
             //transformer = DepthPageTransformer() //层叠渐变效果
             //transformer = ZoomOutPageTransformer()//下沉渐变效果
             transformer = MultiplePagerScaleInTransformer(100, 0.2f)//左右条目缩小漏出效果
-            itemMargin = 25.dp()//条目间距
+            itemMargin = 25.dp//条目间距
             interval = 5000L    //自动翻页时间间隔
             //orientation = ViewPager2.ORIENTATION_VERTICAL
             //设置圆点指示器
             indicator = DotIndicatorDecoration(
                 align = Align.BOTTOM or Align.LEFT,
-                horizontalMargin = 46.dp()
+                horizontalMargin = 46.dp
             )
             //设置图片指示器
             /*indicator = DrawableIndicatorDecoration(
