@@ -9,6 +9,7 @@ import android.os.PowerManager
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -23,7 +24,7 @@ class ViewPager2Banner @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
     /**
      * 自动滚动间隔
      */
@@ -41,10 +42,6 @@ class ViewPager2Banner @JvmOverloads constructor(
         mViewPager2.offscreenPageLimit = 1
         mViewPager2.registerOnPageChangeCallback(PageFixCallback())
         addView(mViewPager2)
-    }
-
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        mViewPager2.layout(l, t, r, b)
     }
 
     /**

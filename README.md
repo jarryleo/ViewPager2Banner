@@ -36,17 +36,18 @@
 引用：
 Step 1. Add the JitPack repository to your build file          
 Add it in your root build.gradle at the end of repositories:        
-
+```
 	allprojects {
 		repositories {
 			...
 			maven { url 'https://jitpack.io' }
 		}
 	}
-	
+```
 Step 2. Add the dependency
-
+```
 	dependencies {
-		implementation 'androidx.viewpager2:viewpager2:1.0.0'
-	    implementation 'com.github.jarryleo:ViewPager2Banner:v1.3'
+		implementation 'androidx.viewpager2:viewpager2:1.0.0'     
+	    implementation 'com.github.jarryleo:ViewPager2Banner:v1.5'     
 	}
+```
