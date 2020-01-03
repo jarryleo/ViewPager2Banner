@@ -18,7 +18,7 @@
             //transformer = ZoomOutPageTransformer()//下沉渐变效果
             //transformer = MultiplePagerScaleInTransformer(100,0.2f)//左右条目缩小漏出效果
             itemMargin = 25.dp //条目间距
-	        interval = 5000L   //自动翻页时间间隔
+	    interval = 5000L   //自动翻页时间间隔
             //设置圆点指示器
             indicator = DotIndicatorDecoration(
                 align = Align.BOTTOM or Align.LEFT,
