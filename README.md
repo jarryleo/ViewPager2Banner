@@ -1,7 +1,8 @@
 # ViewPager2Banner
 使用ViewPager2实现的banner效果
 
-可以实现不同的特殊效果，具体请看示例；可以竖向滚动！
+可以实现不同的特殊效果，具体请看示例；可以竖向滚动！        
+更多翻页效果参考：[ViewPagerTransforms](https://github.com/ToxicBakery/ViewPagerTransforms)
 
 ![screenShot](image/screenShot.png)
 
