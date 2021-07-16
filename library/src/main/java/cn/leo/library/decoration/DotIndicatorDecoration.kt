@@ -24,7 +24,7 @@ import kotlin.math.max
 @Suppress("UNUSED", "UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
 class DotIndicatorDecoration(
     //是否是无限循环
-    private val isInfinite: Boolean = true,
+    private var isInfinite: Boolean = true,
     //指示器位置，可以用 ALIGN_BOTTOM or ALIGN_RIGHT 来表示右下
     @IndicatorAlign
     private var align: Int = BOTTOM,
@@ -160,4 +160,7 @@ class DotIndicatorDecoration(
         this.align = align
     }
 
+    fun isInfinite(isInfinite: Boolean){
+        this.isInfinite = isInfinite
+    }
 }

@@ -15,16 +15,16 @@ import kotlin.math.abs
 class MultiplePagerScaleInTransformer(
     @param:Px private val margin: Int,
     private val scale: Float = 1f
-) :
-    ViewPager2.PageTransformer {
+) : ViewPager2.PageTransformer {
+    private var mViewPager2: ViewPager2? = null
     override fun transformPage(
         page: View,
         position: Float
     ) {
-        val viewPager = requireViewPager(page)
+        mViewPager2 = mViewPager2 ?: requireViewPager(page)
         val offset = position * margin
-        if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
-            if (ViewCompat.getLayoutDirection(viewPager) == ViewCompat.LAYOUT_DIRECTION_RTL) {
+        if (mViewPager2?.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+            if (ViewCompat.getLayoutDirection(mViewPager2!!) == ViewCompat.LAYOUT_DIRECTION_RTL) {
                 page.translationX = offset
             } else {
                 page.translationX = -offset

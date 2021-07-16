@@ -103,7 +103,10 @@ class ViewPager2Banner @JvmOverloads constructor(
 
     private fun nextPage() {
         removeCallbacks(mAutoSwitchRunnable)
-        postDelayed(mAutoSwitchRunnable, interval)
+        //翻页间隔最少0.1秒
+        if (interval > 100) {
+            postDelayed(mAutoSwitchRunnable, interval)
+        }
     }
 
     fun getNextPosition(): Int {
