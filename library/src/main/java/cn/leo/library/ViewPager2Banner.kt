@@ -1,5 +1,8 @@
 package cn.leo.library
 
+import android.animation.Animator
+import android.animation.TimeInterpolator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Rect
 import android.os.Build
@@ -9,6 +12,7 @@ import android.os.PowerManager
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +33,7 @@ class ViewPager2Banner @JvmOverloads constructor(
      * 自动滚动间隔
      */
     var interval = 3000L
+    var animDuration = 500L
     private var mIsAutoSwitch = true
     private var mCurrentPosition = RecyclerView.NO_POSITION
     private var mWrapperAdapter: WrapperAdapter<*>? = null
@@ -213,8 +218,20 @@ class ViewPager2Banner @JvmOverloads constructor(
     @ViewPager2.Orientation
     fun getOrientation() = mViewPager2.orientation
 
-    fun setCurrentItem(item: Int, smoothScroll: Boolean = true) {
-        mViewPager2.setCurrentItem(item, smoothScroll)
+    fun setCurrentItem(
+        item: Int,
+        smoothScroll: Boolean = true,
+        duration: Long = animDuration
+    ) {
+        //mViewPager2.setCurrentItem(item, smoothScroll)
+        if (smoothScroll) {
+            mViewPager2.setCurrentItem(item, duration = duration)
+        } else {
+            if (mViewPager2.isFakeDragging) {
+                mViewPager2.endFakeDrag()
+            }
+            mViewPager2.setCurrentItem(item, smoothScroll)
+        }
     }
 
     /**
@@ -323,5 +340,48 @@ class ViewPager2Banner @JvmOverloads constructor(
                 return arrayOfNulls(size)
             }
         }
+    }
+
+
+    /**
+     * 控制翻页速度
+     */
+    private fun ViewPager2.setCurrentItem(
+        item: Int,
+        duration: Long = 500,
+        interpolator: TimeInterpolator = AccelerateDecelerateInterpolator(),
+        pagePx: Int = if (orientation == ViewPager2.ORIENTATION_VERTICAL) {
+            height
+        } else {
+            width
+        } //滑动一页的像素距离，默认为宽高
+    ) {
+        val pxToDrag: Int = pagePx * (item - currentItem)
+        val animator = ValueAnimator.ofInt(0, pxToDrag)
+        var previousValue = 0
+        animator.addUpdateListener { valueAnimator ->
+            val currentValue = valueAnimator.animatedValue as Int
+            val currentPxToDrag = (currentValue - previousValue).toFloat()
+            fakeDragBy(-currentPxToDrag)
+            previousValue = currentValue
+        }
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+                beginFakeDrag()
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                endFakeDrag()
+            }
+
+            override fun onAnimationCancel(animation: Animator?) { /* Ignored */
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) { /* Ignored */
+            }
+        })
+        animator.interpolator = interpolator
+        animator.duration = duration
+        animator.start()
     }
 }
