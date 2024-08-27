@@ -1,13 +1,20 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
-
+    namespace 'cn.leo.library'
+    compileSdkVersion 34
     defaultConfig {
         minSdkVersion 21
         consumerProguardFiles 'consumer-rules.pro'
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -15,5 +22,5 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'androidx.appcompat:appcompat:1.3.0'
     compileOnly 'androidx.core:core-ktx:1.3.1'
-    compileOnly 'androidx.viewpager2:viewpager2:1.0.0'
+    compileOnly 'androidx.viewpager2:viewpager2:1.1.0'
 }
