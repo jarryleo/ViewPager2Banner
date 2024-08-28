@@ -27,11 +27,11 @@ class MainActivity : AppCompatActivity() {
         //配置图片banner
         viewBinding.banner.config {
             adapter = BannerAdapter().apply { data = imgRes }
-            transformer = ZoomOutTransformer()
+            transformer = CubeOutScaleTransformer()
             //transformer = DepthPageTransformer() //层叠渐变效果
             //transformer = ZoomOutPageTransformer()//下沉渐变效果
             //transformer = MultiplePagerScaleInTransformer(100, 0.2f)//左右条目缩小漏出效果
-            itemMargin = 35.dp//条目间距
+            //itemMargin = 35.dp//条目间距
             interval = 5000L    //自动翻页时间间隔
             //orientation = ViewPager2.ORIENTATION_VERTICAL
             //设置圆点指示器
