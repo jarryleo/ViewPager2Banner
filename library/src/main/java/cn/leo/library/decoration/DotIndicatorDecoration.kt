@@ -4,13 +4,14 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import cn.leo.library.annotation.IndicatorAlign
 import cn.leo.library.annotation.Align.BOTTOM
 import cn.leo.library.annotation.Align.LEFT
 import cn.leo.library.annotation.Align.RIGHT
 import cn.leo.library.annotation.Align.TOP
+import cn.leo.library.annotation.IndicatorAlign
 import cn.leo.library.support.dp
 import kotlin.math.max
 
@@ -97,6 +98,11 @@ class DotIndicatorDecoration(
         if (align and BOTTOM == BOTTOM) {
             indicatorTop = height - max(unselectedSize, selectedSize) - verticalMargin
         }
+        val isRtl =
+            parent.context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+        if (isRtl){
+            centerItemPosition = itemCount - centerItemPosition - 1
+        }
         //绘制指示器
         for (i in 0 until itemCount) {
             var r = unselectedSize
@@ -160,7 +166,7 @@ class DotIndicatorDecoration(
         this.align = align
     }
 
-    fun isInfinite(isInfinite: Boolean){
+    fun isInfinite(isInfinite: Boolean) {
         this.isInfinite = isInfinite
     }
 }

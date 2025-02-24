@@ -11,6 +11,7 @@ import android.os.Parcelable
 import android.os.PowerManager
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
@@ -114,7 +115,14 @@ class ViewPager2Banner @JvmOverloads constructor(
         }
     }
 
+    fun isRtl(): Boolean {
+        return context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+    }
+
     fun getNextPosition(): Int {
+        if (isRtl()) {
+            return mCurrentPosition - 1
+        }
         return mCurrentPosition + 1
     }
 
@@ -154,7 +162,7 @@ class ViewPager2Banner @JvmOverloads constructor(
         fun getRealPosition() = fixPosition(mCurrentPosition)
 
         //包装类条目多2个，从包装索引获取真实索引
-        private fun fixPosition(position: Int): Int {
+        fun fixPosition(position: Int): Int {
             var realPosition = position
             if (adapter.itemCount > 1) {
                 if (position > 0 && position < itemCount - 1) {
@@ -192,6 +200,8 @@ class ViewPager2Banner @JvmOverloads constructor(
     fun getPosition() = mWrapperAdapter?.getRealPosition() ?: RecyclerView.NO_POSITION
 
     fun getCount() = mWrapperAdapter?.getRealCount() ?: 0
+
+    fun getFixPosition(position: Int) = mWrapperAdapter?.fixPosition(position)
 
     private fun getWrapperCount() = mWrapperAdapter?.itemCount ?: 0
 

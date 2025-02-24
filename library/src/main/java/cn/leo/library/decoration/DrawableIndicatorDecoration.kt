@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import cn.leo.library.annotation.Align.BOTTOM
@@ -98,6 +99,11 @@ class DrawableIndicatorDecoration(
         }
         if (align and BOTTOM == BOTTOM) {
             indicatorTop = height - indicatorHeight - verticalMargin
+        }
+        val isRtl =
+            parent.context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+        if (isRtl){
+            centerItemPosition = itemCount - centerItemPosition - 1
         }
         //绘制指示器
         for (i in 0 until itemCount) {
