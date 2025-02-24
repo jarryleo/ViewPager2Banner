@@ -186,15 +186,13 @@ class ViewPager2Banner @JvmOverloads constructor(
 
 
     fun notifyDataSetChanged() {
-        mWrapperAdapter?.notifyDataSetChanged()
         reset()
     }
 
     fun reset() {
-        post {
-            setCurrentItem(1, false)
-            startAutoSwitch()
-        }
+        mWrapperAdapter?.notifyDataSetChanged()
+        setCurrentItem(1, false)
+        startAutoSwitch()
     }
 
     fun getPosition() = mWrapperAdapter?.getRealPosition() ?: RecyclerView.NO_POSITION
