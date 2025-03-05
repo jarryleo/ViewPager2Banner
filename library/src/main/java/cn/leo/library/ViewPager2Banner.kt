@@ -238,7 +238,10 @@ class ViewPager2Banner @JvmOverloads constructor(
             if (mViewPager2.isFakeDragging) {
                 mViewPager2.endFakeDrag()
             }
-            mViewPager2.setCurrentItem(item, smoothScroll)
+            mViewPager2.setCurrentItem(item, false)
+            mViewPager2.post {
+                mViewPager2.requestTransform()
+            }
         }
     }
 
